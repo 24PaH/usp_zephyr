@@ -102,7 +102,8 @@ void app_ranging_results_output( bool is_manager, ranging_global_result_t* resul
     RANGING_LOG_RESULT( "\"RngResult\": {\r\n\t\"Num\": %d,\r\n\t\"Results\": [\r\n", result->cnt_packet_rx_ok );
     for( int i = 0; i < count; i++ )
     {
-        if( result->rng_result[i].distance_m == 0 && result->rng_result[i].rssi == 0 )
+        if( result->rng_result[i].mean_distance_m == 0 && result->rng_result[i].rssi_1 == 0 &&
+            result->rng_result[i].rssi_2 == 0 )
             continue;
 
         // Get the channel frequency according to index
@@ -110,16 +111,21 @@ void app_ranging_results_output( bool is_manager, ranging_global_result_t* resul
 
         RANGING_LOG_RESULT( "\t\t{\"FreqIndex\": \"%d\", ", i );
         RANGING_LOG_RESULT( "\"Freq\": \"%" PRIu32 ".%02" PRIu32 " MHz\", ", freq / 1000000, ( freq / 10000 ) % 100 );
-        RANGING_LOG_RESULT( "\"RawDistance\": \"0x%08" PRIx32 "\", ", result->rng_result[i].raw_distance );
-        RANGING_LOG_RESULT( "\"Distance\": \"%" PRId32 " m\", ", result->rng_result[i].distance_m );
+        RANGING_LOG_RESULT( "\"RawDistance1\": \"0x%08" PRIx32 "\", ", result->rng_result[i].raw_distance_1 );
+        RANGING_LOG_RESULT( "\"Distance1\": \"%" PRId32 " m\", ", result->rng_result[i].distance_1_m );
+        RANGING_LOG_RESULT( "\"RawDistance2\": \"0x%08" PRIx32 "\", ", result->rng_result[i].raw_distance_2 );
+        RANGING_LOG_RESULT( "\"Distance2\": \"%" PRId32 " m\", ", result->rng_result[i].distance_2_m );
+        RANGING_LOG_RESULT( "\"MeanDistance\": \"%" PRId32 " m\", ", result->rng_result[i].mean_distance_m );
 
         if( i < count - 1 )
         {
-            RANGING_LOG_RESULT( "\"RSSI\": \"%d dBm\" },\r\n", result->rng_result[i].rssi );
+            RANGING_LOG_RESULT( "\"RSSI1\": \"%d dBm\", \"RSSI2\": \"%d dBm\" },\r\n", result->rng_result[i].rssi_1,
+                                result->rng_result[i].rssi_2 );
         }
         else
         {
-            RANGING_LOG_RESULT( "\"RSSI\": \"%d dBm\" }\r\n", result->rng_result[i].rssi );
+            RANGING_LOG_RESULT( "\"RSSI1\": \"%d dBm\", \"RSSI2\": \"%d dBm\" }\r\n", result->rng_result[i].rssi_1,
+                                result->rng_result[i].rssi_2 );
         }
     }
 
