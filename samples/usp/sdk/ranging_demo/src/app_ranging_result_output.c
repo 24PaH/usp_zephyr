@@ -88,6 +88,7 @@ void app_ranging_radio_settings_output( smtc_rac_radio_lora_params_t* lora_setti
 void app_ranging_results_output( bool is_manager, ranging_global_result_t* result, int count )
 {
     uint32_t freq;
+    int i_packet_rx_ok = 0;
 
     RANGING_LOG_RESULT( "\"ROLE\": \"%s\",\r\n", ( is_manager == true ) ? "MANAGER" : "SUBORDINATE" );
     RANGING_LOG_RESULT( "\"LoRa RSSI\": \"%d dBm\",\r\n", result->rssi_value );
@@ -118,7 +119,7 @@ void app_ranging_results_output( bool is_manager, ranging_global_result_t* resul
         RANGING_LOG_RESULT( "\"MeanDistance\": \"%" PRId32 " m\", ", result->rng_result[i].mean_distance_m );
         RANGING_LOG_RESULT( "\"DurationMs\": %" PRIu32 ", ", result->rng_result[i].duration_ms );
 
-        if( i < count - 1 )
+        if( i_packet_rx_ok < result->cnt_packet_rx_ok - 1 )
         {
             RANGING_LOG_RESULT( "\"RSSI1\": \"%d dBm\", \"RSSI2\": \"%d dBm\" },\r\n", result->rng_result[i].rssi_1,
                                 result->rng_result[i].rssi_2 );
@@ -128,6 +129,8 @@ void app_ranging_results_output( bool is_manager, ranging_global_result_t* resul
             RANGING_LOG_RESULT( "\"RSSI1\": \"%d dBm\", \"RSSI2\": \"%d dBm\" }\r\n", result->rng_result[i].rssi_1,
                                 result->rng_result[i].rssi_2 );
         }
+
+        i_packet_rx_ok++;
     }
 
     RANGING_LOG_RESULT( "\t\t],\r\n" );
