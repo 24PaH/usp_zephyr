@@ -116,6 +116,7 @@ void app_ranging_results_output( bool is_manager, ranging_global_result_t* resul
         RANGING_LOG_RESULT( "\"RawDistance2\": \"0x%08" PRIx32 "\", ", result->rng_result[i].raw_distance_2 );
         RANGING_LOG_RESULT( "\"Distance2\": \"%" PRId32 " m\", ", result->rng_result[i].distance_2_m );
         RANGING_LOG_RESULT( "\"MeanDistance\": \"%" PRId32 " m\", ", result->rng_result[i].mean_distance_m );
+        RANGING_LOG_RESULT( "\"DurationMs\": %" PRIu32 ", ", result->rng_result[i].duration_ms );
 
         if( i < count - 1 )
         {
